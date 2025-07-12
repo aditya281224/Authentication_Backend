@@ -66,7 +66,7 @@ exports.login=async (req,res)=>{
 
     // 2nd if user exists with the email
 
-    const existingUser=await User.findOne({email});
+    let existingUser=await User.findOne({email});
 
     if(!existingUser){
       return res.status(401).json({
@@ -90,7 +90,7 @@ exports.login=async (req,res)=>{
       let token =jwt.sign(payload,process.env.JWT_SECRET,{
         expiresIn:"2h"
       })
-
+      existingUser=existingUser.toObject();
       existingUser.token=token;
       existingUser.password=undefined;
       const options={
